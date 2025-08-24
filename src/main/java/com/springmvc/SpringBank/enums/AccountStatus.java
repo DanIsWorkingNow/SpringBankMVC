@@ -1,5 +1,8 @@
 package com.springmvc.SpringBank.enums;
 
-public class AccountStatus {
+public enum AccountStatus {
+    ACTIVE,
+    CLOSED,
+    SUSPENDED
     
 }

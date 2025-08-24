@@ -1,5 +1,8 @@
 package com.springmvc.SpringBank.enums;
 
-public class TransactionType {
-    
+public enum TransactionType {
+    DEPOSIT,
+    WITHDRAWAL,
+    TRANSFER
+
 }

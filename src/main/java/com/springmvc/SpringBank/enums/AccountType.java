@@ -1,5 +1,7 @@
 package com.springmvc.SpringBank.enums;
 
-public class AccountType {
-    
+public enum AccountType {
+    SAVINGS,
+    CURRENT,
+    FIXED_DEPOSIT
 }
