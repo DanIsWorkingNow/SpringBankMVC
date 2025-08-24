@@ -72,19 +72,9 @@ public class AccountService {
     }
     
     /**
-     * Find account with customer details loaded
-     * This supports the "account holder details" requirement
+     * REMOVED PROBLEMATIC METHOD - using simple findByAccountNumber instead
+     * The controller will handle getting customer details separately
      */
-    @Transactional(readOnly = true)
-    public Account findByAccountNumberWithCustomer(String accountNumber) {
-        logger.info("Finding account with customer details: {}", accountNumber);
-        
-        Account account = accountRepository.findByAccountNumberWithCustomer(accountNumber)
-            .orElseThrow(() -> new AccountNotFoundException("Account not found: " + accountNumber));
-        
-        logger.info("Account with customer details found: {}", accountNumber);
-        return account;
-    }
     
     /**
      * Close an account

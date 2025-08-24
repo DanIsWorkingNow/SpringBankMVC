@@ -76,14 +76,11 @@ public class AccountController {
         logger.info("Received request to get account: {}", accountNumber);
         
         try {
-            // Find account with customer details
-            Account account = accountService.findByAccountNumberWithCustomer(accountNumber);
+            // Find account using regular method (not the problematic one)
+            Account account = accountService.findByAccountNumber(accountNumber);
             
-            // Get customer details if not loaded
-            Customer customer = account.getCustomer();
-            if (customer == null) {
-                customer = customerService.findCustomerById(account.getCustomerId());
-            }
+            // Get customer details separately
+            Customer customer = customerService.findCustomerById(account.getCustomerId());
             
             // Convert to response DTO
             AccountResponse response = AccountResponse.from(account, customer);

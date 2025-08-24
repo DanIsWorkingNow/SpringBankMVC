@@ -29,7 +29,6 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     // Check if account number exists
     boolean existsByAccountNumber(String accountNumber);
     
-    // Find account with customer details
-    @Query("SELECT a FROM Account a JOIN FETCH a.customer WHERE a.accountNumber = :accountNumber")
-    Optional<Account> findByAccountNumberWithCustomer(@Param("accountNumber") String accountNumber);
+    // REMOVED PROBLEMATIC JOIN FETCH - using separate queries instead
+    // The original query caused issues with the read-only relationship
 }
