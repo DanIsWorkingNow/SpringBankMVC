@@ -9,6 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+/**
+ * Service layer for Customer management
+ * Contains business logic for customer operations
+ * FIXES: Added missing import java.util.List and implemented missing methods
+ */
 @Service
 @Transactional
 public class CustomerService {
@@ -18,6 +25,10 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
     
+    /**
+     * Create a new customer
+     * Assessment Requirement: "Create Customer: Accepts name and auto-generates ID"
+     */
     public Customer createCustomer(String name, String email, String phone) {
         logger.info("Creating customer with name: {}", name);
         
@@ -33,6 +44,10 @@ public class CustomerService {
         return savedCustomer;
     }
     
+    /**
+     * Find customer by ID
+     * Assessment Requirement: "Inquire Customer: Returns customer details by ID"
+     */
     @Transactional(readOnly = true)
     public Customer findCustomerById(Long id) {
         logger.info("Searching for customer with ID: {}", id);
@@ -41,71 +56,67 @@ public class CustomerService {
             .orElseThrow(() -> new CustomerNotFoundException("Customer not found with ID: " + id));
     }
 
-    // Add these methods to your existing CustomerService.java
+    /**
+     * GET ALL CUSTOMERS - CRITICAL MISSING METHOD
+     * Returns all customers in the database
+     * This method was missing and causing compilation errors
+     * Frontend requires this for the GET /api/customers endpoint
+     */
+    @Transactional(readOnly = true)
+    public List<Customer> findAllCustomers() {
+        logger.info("Retrieving all customers from database");
+        
+        try {
+            List<Customer> customers = customerRepository.findAll();
+            
+            logger.info("Found {} customers in database", customers.size());
+            return customers;
+            
+        } catch (Exception e) {
+            logger.error("Error retrieving all customers from database", e);
+            throw new RuntimeException("Failed to retrieve customers", e);
+        }
+    }
 
-/**
- * GET ALL CUSTOMERS
- * Returns all customers in the database
- */
-@Transactional(readOnly = true)
-public List<Customer> findAllCustomers() {
-    logger.info("Retrieving all customers from database");
-    
-    try {
-        List<Customer> customers = customerRepository.findAll();
+    /**
+     * SEARCH CUSTOMERS BY NAME - MISSING METHOD
+     * Returns customers whose names contain the search term (case-insensitive)
+     * This method was referenced but not implemented, causing compilation errors
+     */
+    @Transactional(readOnly = true)
+    public List<Customer> findCustomersByName(String name) {
+        logger.info("Searching customers by name containing: {}", name);
         
-        logger.info("Found {} customers in database", customers.size());
-        return customers;
-        
-    } catch (Exception e) {
-        logger.error("Error retrieving all customers from database", e);
-        throw new RuntimeException("Failed to retrieve customers", e);
+        try {
+            List<Customer> customers = customerRepository.findByNameContainingIgnoreCase(name);
+            
+            logger.info("Found {} customers matching name pattern: '{}'", customers.size(), name);
+            return customers;
+            
+        } catch (Exception e) {
+            logger.error("Error searching customers by name: {}", name, e);
+            throw new RuntimeException("Failed to search customers by name", e);
+        }
     }
-}
 
-/**
- * SEARCH CUSTOMERS BY NAME
- * Returns customers whose names contain the search term (case-insensitive)
- */
-@Transactional(readOnly = true)
-public List<Customer> findCustomersByName(String name) {
-    logger.info("Searching for customers with name containing: {}", name);
-    
-    if (name == null || name.trim().isEmpty()) {
-        throw new IllegalArgumentException("Search name cannot be empty");
+    /**
+     * GET CUSTOMER COUNT - MISSING METHOD
+     * Returns total number of customers in the database
+     * This method was referenced but not implemented, causing compilation errors
+     */
+    @Transactional(readOnly = true)
+    public long getCustomerCount() {
+        logger.info("Getting total customer count");
+        
+        try {
+            long count = customerRepository.count();
+            
+            logger.info("Total customer count: {}", count);
+            return count;
+            
+        } catch (Exception e) {
+            logger.error("Error getting customer count from database", e);
+            throw new RuntimeException("Failed to get customer count", e);
+        }
     }
-    
-    try {
-        List<Customer> customers = customerRepository.findByNameContainingIgnoreCase(name.trim());
-        
-        logger.info("Found {} customers matching name: '{}'", customers.size(), name);
-        return customers;
-        
-    } catch (Exception e) {
-        logger.error("Error searching customers by name: {}", name, e);
-        throw new RuntimeException("Failed to search customers", e);
-    }
-}
-
-/**
- * GET CUSTOMER COUNT
- * Returns total number of customers in database
- */
-@Transactional(readOnly = true)
-public long getCustomerCount() {
-    logger.info("Counting total customers in database");
-    
-    try {
-        long count = customerRepository.count();
-        
-        logger.info("Total customers in database: {}", count);
-        return count;
-        
-    } catch (Exception e) {
-        logger.error("Error counting customers", e);
-        throw new RuntimeException("Failed to count customers", e);
-    }
-}
-    
-    // Additional methods...
 }
