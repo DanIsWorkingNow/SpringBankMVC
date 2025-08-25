@@ -17,4 +17,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByIdWithAccounts(@Param("id") Long id);
     
     boolean existsByEmail(String email);
+    // Add this method to your existing CustomerRepository.java interface
+
+/**
+ * Find customers by name containing search term (case-insensitive)
+ * Spring Data JPA will auto-implement this method
+ */
+   List<Customer> findByNameContainingIgnoreCase(String name);
 }
